@@ -76,6 +76,6 @@ export const Button = styled.button`
   border-color: ${({borderColor}) => borderColor || ''};
   border-width: ${({borderWidth})=> borderWidth || 0};
   box-shadow: 5px 5px 5px grey;
-
+  cursor: pointer;
 
 `;

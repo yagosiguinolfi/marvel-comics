@@ -15,6 +15,7 @@ const PrivateRoute = ({ component: Component }, ...rest) => (
 
 const Routes = () => (
     <Switch>
+      <Route exact path="/" component={() => <Redirect to={{ pathname: "/login"}} />} />
       <Route exact path="/login" component={() => <Login/>} />
       <PrivateRoute path="/app" component={() => <h1>Autenticado!</h1>} />
     </Switch>
