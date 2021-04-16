@@ -14,10 +14,15 @@ const PrivateRoute = ({ component: Component }, ...rest) => (
 )
 
 const Routes = () => (
-    <Switch>
-      <Route exact path="/login" component={() => <Login/>} />
-      <PrivateRoute path="/app" component={() => <h1>Autenticado!</h1>} />
-    </Switch>
+  <Switch>
+    <Route path="/login" component={() => <Login />} />
+    <Route path="/register" component={() => <h1>Cadastro</h1>} />
+    <PrivateRoute exact path="/" component={() => <h1>Home</h1>} />
+    <PrivateRoute path="/profile" component={() => <h1>Perfil</h1>} />
+    <PrivateRoute path="/characters" component={() => <h1>Personagens</h1>} />
+    <PrivateRoute path="/comics" component={() => <h1>Comics</h1>} />
+    <PrivateRoute path="/favorites" component={() => <h1>Favoritos</h1>} />
+  </Switch>
 );
 
 export default Routes;
