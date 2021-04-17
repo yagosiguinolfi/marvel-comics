@@ -6,38 +6,40 @@ import { useHistory } from "react-router-dom";
 
 import bkgLogin from '../../assets/images/background-login-black.png';
 import imgComicsLogo from '../../assets/images/marvel-comics-logo.png';
+import { useRouteMatch } from "react-router";
 
-function Login() {
+function Login () {
+  let match = useRouteMatch();
   let history = useHistory();
 
-  function goToRegister() {
-    history.push('/register');
+  function isAutenticated(params) {
+    return true;
+    
   }
-
-  function authLogin() {
+  function authLogin(){
     // if(isAutenticated({user: 'yago', pass: '123'}))
-    history.push('/');
+    history.push('/app');
   }
 
   return (
     <Container backgroundImage={bkgLogin}>
       <View
-        width={'650px'}
-        height={'400px'}
-        radius={20}
+        width={'750px'}
+        height={'500px'}
+        radius={'20px'}
         column
         color={colors.white} >
-        <Image src={imgComicsLogo} width={200} />
+        <Image src={imgComicsLogo} width={'200px'} />
         <View>
-          <View align={'flex-start'} margin={'15px 0'}>
-            <Text bold>Email</Text>
-            <Input />
-            <Text bold>Senha</Text>
-            <Input />
-            <Link size={13} to={`/app`} >Esqueceu sua senha?</Link>
+        <View align={'flex-start'}>
+          <Text>Usuário</Text>
+          <Input />
+          <Text>Senha</Text>
+          <Input />
+          <Link size={'13px'} to={`/app`} >Esqueceu sua senha?</Link>
           </View>
           <View row>
-            <Button light borderWidth={2} borderColor={colors.red} onClick={goToRegister}><Text color={colors.red} bold>Cadastre-se</Text></Button>
+            <Button light borderWidth={2} borderColor={colors.red}><Text color={colors.red} bold>Cadastre-se</Text></Button>
             <Button light borderWidth={2} borderColor={colors.red} onClick={() => authLogin()}><Text color={colors.red} bold>Login</Text></Button>
           </View>
         </View>
