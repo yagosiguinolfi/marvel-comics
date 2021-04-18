@@ -1,5 +1,7 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
+import Characters from './pages/Characters';
+import Comics from './pages/Comics';
 
 import Home from './pages/Home';
 import Login from './pages/Login';
@@ -20,12 +22,12 @@ function Router() {
     <Routes>
       <Route path="login" element={<Login />} />
       <Route path="register" element={<Register />} />
-      <PrivateRoute path="profile" element={<h1>Perfil</h1>} />
+      <Route path="profile" element={<h1>Perfil</h1>} />
       <Route path="/" element={<Home />}>
-        <PrivateRoute path="characters" element={<Home initialState={{ page: { id: "characters", text: "Characters", } }} />} />
-        <PrivateRoute path="comics" element={<Home initialState={{ page: { id: "comics", text: "Comics", } }} />} />
+        <Route path="characters" element={<Characters />} />
+        <Route path="comics" element={<Comics />} />
       </Route>
-      <PrivateRoute path="favorites" element={<h1>Favoritos</h1>} />
+      <Route path="favorites" element={<h1>Favoritos</h1>} />
       <Route path="*" element={<h1>Not found route</h1>} />
     </Routes>
   );
