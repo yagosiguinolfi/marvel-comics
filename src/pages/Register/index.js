@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useHistory } from "react-router-dom";
+// import { useRoutes } from "react-router-dom";
 import { Container, Text, Input, Button } from "../../utils/styles";
 import { View, Image } from "./styles";
 import { colors } from "../../utils/colors";
@@ -18,17 +18,17 @@ const initialState = {
 };
 
 function Register() {
-  let history = useHistory();
+  // let routes = useRoutes();
 
   const [state, setState] = useState(initialState);
 
   function doRegister() {
     // if(isAutenticated({user: 'yago', pass: '123'}))
-    // history.push('/app');
+    // routes.push('/app');
   }
 
   function goToLogin() {
-    history.push("/login");
+    // routes.push("/login");-
   }
 
   function handleInputChange(event) {

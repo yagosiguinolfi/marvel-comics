@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { useHistory } from "react-router-dom";
-import { Container, Text, View, Input, Button } from "../../utils/styles";
+import { useNavigate } from "react-router-dom";
+import { Container, Text, View, View as Content, Input, Button } from "../../utils/styles";
 import { Image } from "./styles";
 import { colors } from "../../utils/colors";
 
@@ -14,22 +14,23 @@ const initialState = {
   },
 };
 
-function Home() {
-  let history = useHistory();
+function Home({params}) {
+  // let routes = useRoutes();
 
   const [state, setState] = useState(initialState);
+  const navigate = useNavigate();
 
   function goToLogin() {
-    history.push(`/`);
+    // routes.push(`/`);
   }
 
   function goToPage(page) {
-    history.push(`/${page}`);
+    navigate(page);
   }
 
   function changePage({id, text}) {
     setState({ ...state, page: { id, text} });
-    goToPage(id);
+    goToPage(id)
   }
 
   return (
@@ -75,11 +76,11 @@ function Home() {
             </Text>
           </Button>
         </View>
-        <View>
+        <Content>
           <Text size={42} dark bold>
             {state.page.text}
           </Text>
-        </View>
+        </Content>
       </View>
     </Container>
   );
