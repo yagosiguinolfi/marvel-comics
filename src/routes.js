@@ -13,14 +13,14 @@ import Register from './pages/Register';
 function Router() {
   return (
     <Routes>
-      <Route path="login" element={<Login />} />
-      <Route path="register" element={<Register />} />
-      <Route path="profile" element={<Profile />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<Register />} />
+      <Route path="/profile" element={<Profile />} />
       <Route path="/" element={<Home />} />
-      <Route path="characters" element={<Characters />} />
-      <Route path="comics" element={<Comics />} />
-      <Route path="details/:id" element={<Details />} />
-      <Route path="favorites" element={<h1>Favoritos</h1>} />
+      <Route path="/characters" element={<Characters />} />
+      <Route path="/comics" element={<Comics />} />
+      <Route path="/details/:id" element={<Details />} />
+      <Route path="/favorites" element={<h1>Favoritos</h1>} />
       <Route path="*" element={<h1>Not found route</h1>} />
     </Routes>
   );
