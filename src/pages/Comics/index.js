@@ -1,20 +1,26 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
-import { Container, Text, Input } from "../../utils/styles";
-import { View, ViewBkg, Image, Button, Favorite } from "./styles";
+import { Container, Text, View } from "../../utils/styles";
+import { ViewCard, ViewBkg, Button, Favorite, BackButton } from "./styles";
 import { colors } from "../../utils/colors";
+import { FaHeartBroken } from '@react-icons/all-files/fa/FaHeartBroken';
+import { FaHeart } from '@react-icons/all-files/fa/FaHeart';
 
-import bkgComics from "../../assets/images/background-login-black.png";
+import bkgApp from "../../assets/images/background-login-black.png";
 import imgComicsLogo from "../../assets/images/marvel-comics-logo.png";
 import { createHash } from "../../config/marvelHash";
 import axios from "axios";
+import HeaderBar from "../../components/HeaderBar";
+import { Image } from "../Home/styles";
+import { TiArrowBackOutline } from "@react-icons/all-files/ti/TiArrowBackOutline";
+import { TiArrowForwardOutline } from "@react-icons/all-files/ti/TiArrowForwardOutline";
 
 const initialState = {
   page: {
     id: "comics",
     text: "Comics",
   },
-  data: {}
+  data: {},
 };
 
 function Comics() {
@@ -25,7 +31,7 @@ function Comics() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios.get(`http://gateway.marvel.com/v1/public/comics?ts=${timestamp}&apikey=${apiKey}&hash=${md5}&limit=20`)
+    axios.get(`http://gateway.marvel.com/v1/public/comics?ts=${timestamp}&apikey=${apiKey}&hash=${md5}&limit=100`)
       .then(async function (response) {
         setState({ ...state, data: response.data.data });
       })
@@ -38,61 +44,63 @@ function Comics() {
     navigate('login');
   }
 
+  function returnPage() {
+    return (
+      <BackButton dark size={50} onClick={() => navigate('/')}>
+        <TiArrowBackOutline size={36} color={colors.white} />
+      </BackButton>
+    );
+  }
+
   function renderCards(item, index) {
     return (
-      <ViewBkg 
-      key={item.id} 
-      backgroundImage={`${item.thumbnail.path}.${item.thumbnail.extension}`}
-      onClick={() => console.log('Click')}
-      >
-      <Text light>{item.title}</Text>
-      <Button size={30}></Button>
-      <Favorite></Favorite>
-      </ViewBkg>
+      <ViewCard>
+        <ViewBkg
+          key={item.id}
+          backgroundImage={`${item.thumbnail.path}.${item.thumbnail.extension}`}
+          onClick={() => console.log('Click')}
+        >
+          <Button dark size={30} >
+            <TiArrowForwardOutline size={20} color={colors.white} />
+          </Button>
+          <Favorite dark size={30} >
+            <FaHeartBroken size={20} color={colors.red} />
+          </Favorite>
+        </ViewBkg>
+        <Text width={160} dark>{item.title}</Text>
+      </ViewCard>
     );
-  }
-
-
-  function renderButton(params) {
-    return (
-      <Button
-        id={params.id}
-        large
-        borderWidth={2}
-        borderColor={colors.red}
-        height={100}
-        onClick={() => goToLogin()}
-      >
-        <Text light size={42} light bold>
-          {params.text}
-        </Text>
-      </Button>
-    );
-  }
-
-  function handleInputChange(event) {
-    const { id, value } = event.target;
-    setState({ ...state, [id]: value });
   }
 
   return (
-    <View padding={'180px 40px 30px'}>
-    <View
-    width={'100%'}
-    height={'100%'}
-    row
-    wrap
-    color={colors.white}
-    justfy={'space-evenly'}
-  >
-    {console.log(state.data.results)}
-      {state.data.results && state.data.results.map(
-        (item, index) =>
-          renderCards(item, index)
-      )}
+    <Container backgroundImage={bkgApp}>
+      <HeaderBar />
+      <View
+        width={"80%"}
+        minHeight={"100%"}
+        column
+      >
+        <View
+          padding={'180px 40px 30px'}
+          width={'100%'}
+          height={'100%'}
+          radius={20}
+          row
+          wrap
+          color={colors.white}
+          justfy={'space-evenly'}
+        >
+          <Image src={imgComicsLogo} width={100} />
+          {returnPage()}
+          {console.log(state.data.results)}
+          {state.data.results && state.data.results.map(
+            (item, index) =>
+              renderCards(item, index)
+          )}
 
-    </View>
-    </View>
+        </View>
+      </View>
+    </Container>
   );
 }
 

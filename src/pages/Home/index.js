@@ -1,11 +1,12 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useNavigate, Outlet } from "react-router-dom";
 import { Container, Text, View, View as Content, Input, Button } from "../../utils/styles";
 import { Image } from "./styles";
 import { colors } from "../../utils/colors";
 
-import bkgRegister from "../../assets/images/background-login-black.png";
+import bkgApp from "../../assets/images/background-login-black.png";
 import imgComicsLogo from "../../assets/images/marvel-comics-logo.png";
+import HeaderBar from "../../components/HeaderBar";
 
 const initialState = {
   page: {
@@ -14,33 +15,63 @@ const initialState = {
   },
 };
 
-function Home({params}) {
-  // let routes = useRoutes();
+function Home({ match }) {
 
   const [state, setState] = useState(initialState);
   const navigate = useNavigate();
 
+  // useEffect(() => {
+  //   async function fetchData() {
+  //     await fetch(`http://gateway.marvel.com/v1/public/characters?ts=${timestamp}&apikey=${apiKey}&hash=${md5}&limit=100`)
+  //       .then(res => {
+  //         return res.json();
+  //       }).then((jsonParsed) => {
+  //         console.log(jsonParsed);
+  //       });
+
+  //   }
+  //   const response = fetchData();
+  //   setData(response.data);
+  // }, []);
+
   function goToLogin() {
-    // routes.push(`/`);
+    navigate('login');
   }
 
   function goToPage(page) {
     navigate(page);
   }
 
-  function changePage({id, text}) {
-    setState({ ...state, page: { id, text} });
-    goToPage(id)
+  function changePage({ id, text }) {
+    setState({ ...state, page: { id, text } });
+    goToPage('/'+ id)
+  }
+
+  function renderButton(params) {
+    return (
+      <Button
+        id={params.id}
+        large
+        borderWidth={2}
+        borderColor={colors.red}
+        height={100}
+        onClick={() => changePage(params)}
+      >
+        <Text size={42} light bold>
+          {params.text}
+        </Text>
+      </Button>
+    );
   }
 
   return (
-    <Container backgroundImage={bkgRegister}>
+    <Container backgroundImage={bkgApp}>
+      <HeaderBar />
       <View
         width={"80%"}
-        height={"100%"}
+        minHeight={"100%"}
         radius={20}
         column
-        color={colors.white}
       >
         <Image src={imgComicsLogo} width={100} />
         <View
@@ -51,36 +82,9 @@ function Home({params}) {
           absolute
           style={{ top: 0 }}
         >
-          <Button
-            id="comics"
-            large
-            borderWidth={2}
-            borderColor={colors.red}
-            height={100}
-            onClick={() => changePage({ id: 'comics', text: 'Comics' })}
-          >
-            <Text size={42} light bold>
-              Comics
-            </Text>
-          </Button>
-          <Button
-            id="characters"
-            large
-            borderWidth={2}
-            borderColor={colors.red}
-            height={100}
-            onClick={() => changePage({ id: 'characters', text: 'Characters' })}
-          >
-            <Text size={42} light bold>
-              Characters
-            </Text>
-          </Button>
+          {renderButton({ 'id': 'comics', 'text': 'Comics' })}
+          {renderButton({ 'id': 'characters', 'text': 'Characters' })}
         </View>
-        <Content>
-          <Text size={42} dark bold>
-            {state.page.text}
-          </Text>
-        </Content>
       </View>
     </Container>
   );
