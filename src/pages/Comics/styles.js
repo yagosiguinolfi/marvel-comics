@@ -1,9 +1,16 @@
 import styled from 'styled-components';
 import { View as UView, Image as UImage, Button as UButton } from '../../utils/styles';
 
+
+export const Button = styled(UButton)`
+  position: absolute;
+  right: 5px;
+  bottom: 5px;
+`;
+
 export const BackButton = styled(UButton)`
   position: absolute;
-  left: 5px;
+  right: 5px;
   top: 5px;
 `;
 
@@ -50,7 +57,7 @@ export const ViewBkg = styled(UView)`
 export const Image = styled(UImage)`
   position: absolute;
   top: 20px;
-  right: 20px;
+  left: 20px;
 `;
 
 

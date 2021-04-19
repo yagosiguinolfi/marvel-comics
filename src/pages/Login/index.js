@@ -5,13 +5,13 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 
-import bkgLogin from '../../assets/images/background-login-black.png';
+import bkgApp from '../../assets/images/background-login-black.png';
 import imgComicsLogo from '../../assets/images/marvel-comics-logo.png';
 
 function Login() {
 
   // const routes = useRoutes();
-  const [state, setState] = useState({ "email": '', 'password': '', 'token': ''});
+  const [state, setState] = useState({ "email": '', 'password': '', 'token': '' });
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -29,24 +29,32 @@ function Login() {
   }, []);
 
   function goToRegister() {
-    // routes.push('/register');
+    navigate('/register');
   }
 
   function authLogin() {
-    axios.post('/authenticate', { email: state.email, password: state.password }, {})
+    axios.post('http://localhost:8080/authenticate', { email: state.email, password: state.password }, {})
       .then(async function (response) {
-        localStorage.setItem( 'token', response.data.token)
+        localStorage.setItem('token', response.data.token)
+        localStorage.setItem('user_id', response.data.user.id)
       })
       .catch(function (error) {
         console.log('Erro:', error)
+        return navigate('/login');
       });
 
 
-    const headers = { authorization: 'Bearer ' + localStorage.getItem('token')  };
+    const headers = { authorization: 'Bearer ' + localStorage.getItem('token') };
 
-    axios.get('/projects', { headers })
+    axios.get('http://localhost:8080/projects', { headers })
       .then(function (response) {
-        if (response.data.ok) navigate('/');
+        if (response.data.ok) {
+          navigate('/');
+        }
+      })
+      .catch(function (error) {
+        console.log('Erro:', error)
+        return navigate('/login');
       });
   }
 
@@ -56,7 +64,7 @@ function Login() {
   }
 
   return (
-    <Container backgroundImage={bkgLogin}>
+    <Container backgroundImage={bkgApp}>
       <View
         width={'650px'}
         height={'400px'}

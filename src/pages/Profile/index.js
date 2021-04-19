@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-// import { useRoutes } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 import { Container, Text, Input, Button } from "../../utils/styles";
 import { View, Image } from "./styles";
 import { colors } from "../../utils/colors";
@@ -7,44 +7,60 @@ import { useNavigate } from "react-router-dom";
 
 import bkgApp from "../../assets/images/background-login-black.png";
 import imgComicsLogo from "../../assets/images/marvel-comics-logo.png";
-import axios from "axios";
 
 const initialState = {
-  name: '',
-  cpf: '',
-  birthDate: '',
-  email: '',
-  password: '',
-  passwordConfirm: '',
-  profileImg: '',
+  data: {
+    id: '',
+    name: '',
+    cpf: '',
+    birthDate: '',
+    email: '',
+    password: '',
+    passwordConfirm: '',
+    profileImg: '',
+  }
 };
 
-function Register() {
+function Profile() {
   // let routes = useRoutes();
 
   const [state, setState] = useState(initialState);
   const navigate = useNavigate();
 
-//"1996-05-03 00:00:00" 
-  function doRegister() {
-    axios.post(
-      'http://localhost:8080/users', { 
-        name: state.name, 
-        email: state.email, 
-        password: state.password, 
-        cpf: state.cpf,    
-        birth_date: state.birthDate + ' 00:00:00',   
-        profile_img: state.profileImg }, {})
+  useEffect(() => {
+    axios.get(`http://localhost:8080/user/`, { body: { id: localStorage.getItem('user_id')}})
       .then(async function (response) {
-        await localStorage.setItem( 'token', response.data.token)
-        console.log(response.data.token)
+        console.log(response.data)
+        await setState({ ...state, ...response.data.user })
       })
       .catch(function (error) {
         console.log('Erro:', error)
       });
-      
+  }, []);
 
-    const headers = { authorization: 'Bearer ' + localStorage.getItem('token')  };
+
+  //"1996-05-03 00:00:00" 
+  function saveProfile() {
+    if(verifyPass())
+    axios.put(
+      'http://localhost:8080/users', {
+      id: localStorage.getItem('user_id'),
+      name: state.name,
+      email: state.email,
+      password: state.password,
+      cpf: state.cpf,
+      birth_date: state.birthDate + ' 00:00:00',
+      profile_img: state.profileImg
+    }, {}).then(async function (response) {
+      await localStorage.setItem('token', response.data.token)
+      console.log(response.data.token)
+    })
+      .catch(function (error) {
+        console.log('Erro:', error)
+      });
+
+
+    const headers = { authorization: 'Bearer ' + localStorage.getItem('token') };
 
     axios.get('http://localhost:8080/projects', { headers })
       .then(function (response) {
@@ -52,9 +68,14 @@ function Register() {
       });
   }
 
-  function goToLogin() {
-    navigate("/login");
+  function verifyPass() {
+    return state.password == state.passwordConfirm;
   }
+
+  function goToHome() {
+    navigate("/");
+  }
+
 
   function handleInputChange(event) {
     const { id, value } = event.target;
@@ -71,16 +92,16 @@ function Register() {
         color={colors.white}
       >
         <Image src={imgComicsLogo} width={100} />
+        {console.log(state)}
         <View padding={'60px 0'} >
           <Text size={32} dark bold>
-            Criar conta
+            Perfil
           </Text>
           <View align={"flex-start"} width={'300px'}>
             <View align={"flex-start"} width={'100%'}>
               <Text marginV>Nome e sobrenome</Text>
               <Input
                 id="name"
-                placeholder="Insira seu nome"
                 value={state.name}
                 onChange={handleInputChange}
               />
@@ -90,7 +111,6 @@ function Register() {
                 <Text>Cpf</Text>
                 <Input
                   id="cpf"
-                  placeholder="Insira seu cpf"
                   value={state.cpf}
                   onChange={handleInputChange}
                 />
@@ -99,7 +119,6 @@ function Register() {
                 <Text>Data de nascimento</Text>
                 <Input
                   id="birthDate"
-                  placeholder="DD-MM-AAAA"
                   value={state.birthDate}
                   onChange={handleInputChange}
                 />
@@ -109,7 +128,6 @@ function Register() {
               <Text>Email</Text>
               <Input
                 id="email"
-                placeholder="Insira seu email"
                 value={state.email}
                 onChange={handleInputChange}
               />
@@ -120,7 +138,6 @@ function Register() {
                 <Input
                   id="password"
                   password
-                  placeholder="Insira sua senha"
                   value={state.password}
                   onChange={handleInputChange}
                 />
@@ -129,8 +146,7 @@ function Register() {
                 <Text>Confirmar senha</Text>
                 <Input
                   id="passwordConfirm"
-                  password                  
-                  placeholder="Confirme sua senha"
+                  password
                   value={state.passwordConfirm}
                   onChange={handleInputChange}
                 />
@@ -142,20 +158,20 @@ function Register() {
               light
               borderWidth={2}
               borderColor={colors.red}
-              onClick={goToLogin}
+              onClick={goToHome}
             >
               <Text color={colors.red} bold>
-                Fazer login
+                Cancelar
               </Text>
             </Button>
             <Button
               light
               borderWidth={2}
               borderColor={colors.red}
-              onClick={() => doRegister()}
+              onClick={() => saveProfile()}
             >
               <Text color={colors.red} bold>
-                Cadastrar
+                Salvar
               </Text>
             </Button>
           </View>
@@ -165,4 +181,4 @@ function Register() {
   );
 }
 
-export default Register;
+export default Profile;

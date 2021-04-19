@@ -4,7 +4,7 @@ import { colors } from '../../utils/colors';
 import { useHistory } from "react-router-dom";
 
 
-import bkgLogin from '../../assets/images/background-login-black.png';
+import bkgApp from '../../assets/images/background-login-black.png';
 import imgComicsLogo from '../../assets/images/marvel-comics-logo.png';
 import { useRouteMatch } from "react-router";
 
@@ -22,7 +22,7 @@ function Login () {
   }
 
   return (
-    <Container backgroundImage={bkgLogin}>
+    <Container backgroundImage={bkgApp}>
       <View
         width={'750px'}
         height={'500px'}
