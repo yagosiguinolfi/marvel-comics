@@ -6,40 +6,47 @@ export const Container = styled.div`
   display: flex;
   flex-direction: column;
   flex: 1;
-  height: 100vh;
+  min-height: 92vh;
+  width: auto;
   align-items:center;
   justify-content:center;
   background-image: url(${({ backgroundImage }) => backgroundImage ? process.env.PUBLIC_URL + backgroundImage : ''}); //./assets/images/background-login.jpg
-  background-repeat: repeat;
+  background-repeat: repeat;  
+  margin:${({ margin }) => margin || 0};
+  padding:${({ padding }) => padding || '30px 50px'};
+
 `;
 
 export const View = styled.div`
   display: flex;
+  position: ${({ absolute }) => absolute ? 'absolute' : 'relative'};
   flex-direction: ${({ row, column }) => row ? 'row' : 'column'};
-  flex-wrap: ${({ wrap }) => `${wrap}` || 'nowrap'};
+  flex-wrap: ${({ wrap }) => wrap ? 'wrap' : 'nowrap'};
   align-items:${({ align }) => align || 'center'};
   justify-content:${({ justify }) => justify || 'center'};
   height:${({ height }) => height || 'auto'};
+  min-height:${({ minHeight }) => minHeight || 'auto'};
   width:${({ width }) => width || 'auto'};
   background-color: ${({ color }) => color || ''};
-  border-radius: ${({ radius }) => radius || 0};
+  border-radius: ${({ radius }) => radius || 0}px;
   margin:${({ margin }) => margin || 0};
   padding:${({ padding }) => padding || 0};
 `;
 
 export const Image = styled.img`
-  width: ${({ width }) => width || 'auto'};
-  height: ${({ height }) => height || 'auto'};
+  position: ${({position}) => position || 'relative'};
+  width: ${({ width }) => width || 'auto'}px;
+  height: ${({ height }) => height || 'auto'}px;
 `;
 
 export const Text = styled.p`
-  font-size: ${({ size }) => size || '15px'};
+  font-size: ${({ size }) => size || 15}px;
   color:${({ light, dark, color }) => light ? colors.white : dark ? colors.black : color ? color : colors.black};
   font-weight: ${({ bold, italic }) => bold ? 'bold' : italic ? 'italic' : 'normal'};
-  margin:${({ margin }) => margin || '5px'};
+  margin:${({ margin, marginV, marginH }) => margin ? margin : marginV ? '5px 0' : marginH ? '0 5px' : 0};
   padding:${({ padding }) => padding || 0};
-  width: ${({ width }) => width || 'auto'};
-  height: ${({ height }) => height || 'auto'};
+  width: ${({ width }) => width || 'auto'}px;
+  height: ${({ height }) => height || 'auto'}px;
   font-family: "Marvel";
 `;
 
@@ -49,8 +56,8 @@ export const Link = styled.a`
   font-weight: ${({ bold, italic }) => bold ? 'bold' : italic ? 'italic' : 'normal'};
   margin:${({ margin }) => margin || '5px'};
   padding:${({ padding }) => padding || 0};
-  width: ${({ width }) => width || 'auto'};
-  height: ${({ height }) => height || 'auto'};
+  width: ${({ width }) => width || 'auto'}px;
+  height: ${({ height }) => height || 'auto'}px;
   font-family: "Marvel";
   cursor: pointer;
 `;
@@ -58,8 +65,17 @@ export const Link = styled.a`
 export const Input = styled.input`
   margin:${({ margin }) => margin || 0};
   padding:${({ padding }) => padding || 0};
-  width: ${({ width }) => width || 'auto'};
-  height: ${({ height }) => height || 'auto'};
+  width: ${({ width }) => width || 120 }px;
+  height: ${({ height }) => height || 18 }px;
+  font-family: "Marvel";
+  border: 0;
+  border-bottom: 1px solid #ccc;
+  background-color: transparent;
+  outline: 0;
+  :focus{
+    border-bottom: 1px solid #ff0000;
+    transition: 0.6s;
+  }
 `;
 
 
@@ -69,13 +85,13 @@ export const Button = styled.button`
   justify-content: center;
   margin:${({ margin }) => margin || '5px'};
   padding:${({ padding }) => padding || 0}; 
-  width: ${({ width, large, small }) => width ? width : large ? '200px' : small ? '80px' : '120px'};
-  height: ${({ height }) => height || '36px'};
-  color:${({ light, dark, color }) => light ? colors.white : dark ? colors.black : color ? color : colors.red};
-  border-radius: 5px;
+  width: ${({ size, width, large, small }) => width ? width : size ? size : large ? '200' : small ? '80' : '120'}px;
+  height: ${({ size, height }) => height ? height : size ? size : '36'}px;
+  background-color:${({ light, dark, bkgColor }) => light ? colors.white : dark ? colors.black : bkgColor ? bkgColor : colors.red};
+  border-radius:${({size}) => size ? size/2 : 5}px;
   border-color: ${({borderColor}) => borderColor || ''};
-  border-width: ${({borderWidth})=> borderWidth || 0};
-  box-shadow: 5px 5px 5px grey;
-
-
+  border-width: ${({borderWidth})=> borderWidth || 0}px;
+  box-shadow: 3px 3px 8px black;
+  cursor: pointer;
+  outline: 0;
 `;

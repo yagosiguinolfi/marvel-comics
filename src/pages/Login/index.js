@@ -1,34 +1,88 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Container, View, Image, Text, Input, Button, Link } from "../../utils/styles";
 import { colors } from '../../utils/colors';
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
-import bkgLogin from '../../assets/images/background-login-black.png';
+
+import bkgApp from '../../assets/images/background-login-black.png';
 import imgComicsLogo from '../../assets/images/marvel-comics-logo.png';
-import { useRouteMatch } from "react-router";
 
-const Login = () => {
-  let match = useRouteMatch();
+function Login() {
+
+  // const routes = useRoutes();
+  const [state, setState] = useState({ "email": '', 'password': '', 'token': '' });
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    // axios.post('http://localhost:3333/authenticate', { email: state.email, password: state.password })
+    //   .then(res =>
+    //     setToken({ "token": res.token }));
+
+    // const headers = { "Authorization": `Bearer ${token}` };
+
+    // axios.get('http://localhost:3333/projects', {}, { headers })
+    //   .then(res => {
+    //     if (res.ok)
+    //       routes.push('/');
+    //   });
+  }, []);
+
+  function goToRegister() {
+    navigate('/register');
+  }
+
+  function authLogin() {
+    axios.post('http://localhost:8080/authenticate', { email: state.email, password: state.password }, {})
+      .then(async function (response) {
+        localStorage.setItem('token', response.data.token)
+        localStorage.setItem('user_id', response.data.user.id)
+      })
+      .catch(function (error) {
+        console.log('Erro:', error)
+        return navigate('/login');
+      });
+
+
+    const headers = { authorization: 'Bearer ' + localStorage.getItem('token') };
+
+    axios.get('http://localhost:8080/projects', { headers })
+      .then(function (response) {
+        if (response.data.ok) {
+          navigate('/');
+        }
+      })
+      .catch(function (error) {
+        console.log('Erro:', error)
+        return navigate('/login');
+      });
+  }
+
+  function handleInputChange(event) {
+    const { id, value } = event.target;
+    setState({ ...state, [id]: value });
+  }
 
   return (
-    <Container backgroundImage={bkgLogin}>
+    <Container backgroundImage={bkgApp}>
       <View
-        width={'750px'}
-        height={'500px'}
-        radius={'20px'}
+        width={'650px'}
+        height={'400px'}
+        radius={20}
         column
         color={colors.white} >
-        <Image src={imgComicsLogo} width={'200px'} />
+        <Image src={imgComicsLogo} width={200} />
         <View>
-        <View align={'flex-start'}>
-          <Text>Usuário</Text>
-          <Input />
-          <Text>Senha</Text>
-          <Input />
-          <Link size={'13px'} to={`/app`} >Esqueceu sua senha?</Link>
+          <View align={'flex-start'} margin={'15px 0'}>
+            <Text bold>Email</Text>
+            <Input id="email" value={state.email} onChange={handleInputChange} />
+            <Text bold>Senha</Text>
+            <Input type="password" value={state.password} id="password" onChange={handleInputChange} />
+            <Link size={13} to={`/app`} >Esqueceu sua senha?</Link>
           </View>
           <View row>
-            <Button light borderWidth={2} borderColor={colors.red}><Text color={colors.red} bold>Cadastre-se</Text></Button>
-            <Button light borderWidth={2} borderColor={colors.red}><Text color={colors.red} bold onClick={() => this.authLogin()}>Login</Text></Button>
+            <Button light borderWidth={2} borderColor={colors.red} onClick={goToRegister}><Text color={colors.red} bold>Cadastre-se</Text></Button>
+            <Button light borderWidth={2} borderColor={colors.red} onClick={() => authLogin()}><Text color={colors.red} bold>Login</Text></Button>
           </View>
         </View>
       </View>

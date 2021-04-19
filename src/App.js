@@ -1,13 +1,16 @@
 import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
+import AuthContext from './context/auth';
 
-import Routes from './routes';
+import Router from './routes';
 
 function App() {
   return (
-    <BrowserRouter>
-      <Routes />
-    </BrowserRouter>
+    <AuthContext.Provider value={{signed: true}}>
+      <BrowserRouter>
+        <Router />
+      </BrowserRouter>
+    </AuthContext.Provider>
   );
 }
 
