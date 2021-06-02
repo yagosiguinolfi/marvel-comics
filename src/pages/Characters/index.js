@@ -67,7 +67,7 @@ function Characters() {
   }
 
   function favoriteItem(favItem) {
-    const favorited = state.favorites.some(item => item.marvel_id == favItem.id);
+    const favorited = state.favorites.some(item => item.marvel_id === favItem.id);
     if(favorited){
       axios.delete('http://localhost:8080/favorites', { 'id': favorited.id })
       .then(async function (response) {
@@ -98,7 +98,7 @@ function Characters() {
   }
 
   function renderHearth(id) {
-    if (state.favorites.find(item => item.marvel_id == id))
+    if (state.favorites.find(item => item.marvel_id === id))
       return <FaHeart size={20} color={colors.red} />
     return <FaHeartBroken size={20} color={colors.red} />
 
